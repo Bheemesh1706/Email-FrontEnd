@@ -6,14 +6,14 @@ import { TemplateContext } from "./Context/TemplateContext";
 
 export function CreateTemplate() {
 
-  const emailEditorRef = useRef(null);
+  const emailEditorRef = useRef();
   const emailCreatorRef = useRef(null);
   
   const [template,setTemplate]= useContext(TemplateContext);
 
   const exportHtml = () => {
 
-    emailEditorRef.current.editor.exportHtml((data) =>{
+    emailCreatorRef.current.editor.exportHtml((data) =>{
 
       const { design, html } = data;
 
@@ -24,23 +24,27 @@ export function CreateTemplate() {
   };
 
   useEffect(() => {
-    getTemplateData().then((e)=>{
-      console.log('useeejd[');
+    getTemplateData().then((e) => {
+      console.log("useeejd");
       console.log(e);
       setTemplate(e);
     });
-  }, [ ]);
+  }, [emailEditorRef, emailCreatorRef]);
 
   useEffect(() =>{
     
   },[template])
 
 
-  const onLoad = (data) => {
+  const loadDesign = () => {
    
     console.log('onload');
     console.log(template);
-    //emailEditorRef.current.editor.loadDesign(data);
+    if (emailEditorRef.current) {
+      emailEditorRef.current.editor.loadDesign(template);
+    } else {
+      console.log("Data is null");
+    }
   };
 
   return (
@@ -48,12 +52,12 @@ export function CreateTemplate() {
       <div className="index">
         <EmailEditor
           ref={emailEditorRef}
-          onLoad={onLoad(template)}
+          onLoad={loadDesign}
         />
         <section className="index-button">
           <button>Save</button>
-          <button>Edit</button>
         </section>
+
         {/* {TemplateData.map((data)=>(
           <>
         <EmailEditor ref={emailEditorRef} onLoad={onLoad(data.template)} />
@@ -62,6 +66,7 @@ export function CreateTemplate() {
           <button>Edit</button>
         </section>
         </>))} */}
+
       </div>
       <div className="create">
         <EmailEditor ref={emailCreatorRef} />

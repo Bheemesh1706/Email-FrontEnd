@@ -21,6 +21,7 @@ const getTemplateData = async () => {
      console.log("template_axiso");
      const response = await axi.get(`${API_HOST}/emailtemplates`);
      const data = await response.data[0].template;
+     
 
      return data;
 
